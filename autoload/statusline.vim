@@ -27,7 +27,7 @@ endfunction
 " If ALE or syntastic is installed, show a total count of errors.
 function! statusline#syntax()
   let l:count = 0
-  if exists('*ale#statusline#Count')
+  if exists('g:loaded_ale') && g:loaded_ale
     let l:f = ale#statusline#Count(bufnr(''))
     let l:count = l:f.total
   elseif 0
@@ -45,7 +45,7 @@ endfunction
 " the branch name (or commit id when detached).
 function! statusline#git()
   let l:out = ' '
-  if exists('*GitGutterGetHunkSummary')
+  if exists('g:loaded_gitgutter') && g:loaded_gitgutter
     let l:colors = ['GitGutterAdd', 'GitGutterChange', 'GitGutterDelete']
     let l:hunks = GitGutterGetHunkSummary()
     for l:i in range(3)
@@ -55,7 +55,7 @@ function! statusline#git()
       endif
     endfor
   endif
-  if exists('*fugitive#head')
+  if exists('g:loaded_fugitive') && g:loaded_fugitive
     let l:head = fugitive#head(7)
     if len(l:head)
       let l:out .= ' %2*' . l:head
