@@ -30,8 +30,9 @@ function! statusline#syntax()
   if exists('g:loaded_ale') && g:loaded_ale
     let l:f = ale#statusline#Count(bufnr(''))
     let l:count = l:f.total
-  elseif 0
-    " TODO: syntastic
+  elseif exists('g:loaded_syntastic_plugin') && g:loaded_syntastic_plugin
+    let l:f = g:SyntasticLoclist.current(bufnr(''))
+    let l:count = len(l:f.errors()) + len(l:f.warnings())
   endif
   if l:count > 0
     return '%#ErrorMsg# ' . l:count . ' %* '
