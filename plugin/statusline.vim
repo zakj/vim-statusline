@@ -17,5 +17,5 @@ endfunction
 
 augroup status
   autocmd!
-  autocmd VimEnter,WinLeave,BufWinEnter * call s:update()
+  autocmd VimEnter,WinEnter,BufWinEnter * call s:update()
 augroup END
