@@ -21,7 +21,7 @@ function! statusline#reldir(...)
   if l:dir[0] == '/'
     call insert(l:xs, '')
   endif
-  return '%2*' . join(l:xs, '/') . '%*'
+  return '%#StatusLineNC#' . join(l:xs, '/') . '%*'
 endfunction
 
 " If ALE or syntastic is installed, show a total count of errors.
@@ -47,19 +47,19 @@ endfunction
 function! statusline#git()
   let l:out = ' '
   if exists('g:loaded_gitgutter') && g:loaded_gitgutter
-    let l:colors = ['GitGutterAdd', 'GitGutterChange', 'GitGutterDelete']
+    let l:colors = ['StatusLineGitAdd', 'StatusLineGitChange', 'StatusLineGitDelete']
     let l:hunks = GitGutterGetHunkSummary()
     for l:i in range(3)
       let l:hunk = l:hunks[l:i]
       if l:hunk > 0
-        let l:out .= '%#' . l:colors[l:i] . '#' . l:hunk . ' '
+        let l:out .= '%#' . l:colors[l:i] . '#' . l:hunk . '%#StatusLine# '
       endif
     endfor
   endif
   if exists('g:loaded_fugitive') && g:loaded_fugitive
     let l:head = fugitive#head(7)
     if len(l:head)
-      let l:out .= ' %2*' . l:head
+      let l:out .= ' %#StatusLineNC#' . l:head
     endif
   endif
   return l:out . '%*'
@@ -90,14 +90,14 @@ function! statusline#create(winnr)
   " Left side: current window / modified indicator, path and filename.
   if l:buftype == ''
     if l:active && getwinvar(a:winnr, '&modified')
-      let l:status .= '%1*'
+      let l:status .= '%#StatusLineFlag#'
     endif
     let l:status .= ' › %*'
     let l:status .= '%<'
     let l:status .= statusline#reldir()
     let l:status .= '%t'
     if l:active && !getwinvar(a:winnr, '&modifiable')
-      let l:status .= ' %1*⊝%*'
+      let l:status .= ' %#StatusLineFlag#⊝%*'
     endif
   elseif l:buftype == 'help'
     let l:status .= '[Help] %f'
@@ -112,7 +112,7 @@ function! statusline#create(winnr)
   if l:active && l:buftype == ''
     let l:status .= statusline#syntax()
     let l:status .= statusline#git()
-    let l:status .= ' %3v %2*❘%* '
+    let l:status .= ' %3v %#StatusLineNC#❘%* '
   endif
   if l:active
     let l:status .= statusline#scrollbar()
